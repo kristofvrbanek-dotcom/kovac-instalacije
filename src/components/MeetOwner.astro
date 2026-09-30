@@ -1,0 +1,21 @@
+---
+import { Image } from 'astro:assets';
+import markoWork from '../assets/marko-work.jpg';
+import { about } from '../data/site';
+---
+
+<section class="bg-primary-soft py-16 md:py-24" aria-labelledby="about-heading">
+  <div class="mx-auto grid max-w-6xl items-center gap-10 px-4 sm:px-6 md:grid-cols-[1fr_1.2fr] md:gap-14">
+    <div class="overflow-hidden rounded-xl shadow-card" data-reveal="left">
+      <Image src={markoWork} alt={about.imageAlt} widths={[400, 600, 900]} sizes="(min-width: 768px) 40vw, 100vw" class="aspect-[4/5] w-full object-cover" />
+    </div>
+    <div data-reveal="right" data-delay="150">
+      <p class="text-sm font-bold tracking-wider text-primary/80 uppercase">{about.eyebrow}</p>
+      <h2 id="about-heading" class="mt-2 text-3xl font-extrabold sm:text-4xl">{about.heading}</h2>
+      <div class="mt-5 space-y-4 text-lg">
+        {about.paragraphs.map((p) => <p>{p}</p>)}
+      </div>
+      <p class="mt-6 font-display text-3xl font-bold text-primary italic" aria-label={about.signatureLabel}>— {about.signature}</p>
+    </div>
+  </div>
+</section>

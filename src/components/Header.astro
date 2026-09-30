@@ -1,0 +1,36 @@
+---
+import CallButton from './CallButton.astro';
+import Icon from './Icon.astro';
+import { business, cta, a11y } from '../data/site';
+---
+
+<header class="z-40 border-b border-border bg-white/95 backdrop-blur md:sticky md:top-0">
+  <div class="mx-auto flex max-w-6xl items-center justify-between gap-4 px-4 py-3 sm:px-6">
+    <a href="#top" class="flex items-center gap-2.5 rounded-md" aria-label={a11y.homeLink}>
+      <span class="grid h-10 w-10 place-items-center rounded-xl bg-primary text-white" aria-hidden="true">
+        <Icon name="droplets" size={22} />
+      </span>
+      <span class="leading-tight">
+        <span class="block font-display text-xl font-extrabold tracking-tight text-primary">{business.shortName}</span>
+        <span class="block text-xs font-medium text-muted">{business.tagline}</span>
+      </span>
+    </a>
+
+    <!-- Mobile: icon button only; the sticky bar carries the main CTA -->
+    <a
+      href={business.phoneTel}
+      aria-label={business.callLabel}
+      class="grid h-12 w-12 cursor-pointer place-items-center rounded-full bg-cta text-on-cta transition-colors hover:bg-cta-hover active:scale-[0.97] md:hidden"
+    >
+      <Icon name="phone" size={22} strokeWidth={2.5} />
+    </a>
+
+    <!-- Desktop -->
+    <div class="hidden items-center gap-5 md:flex">
+      <a href={business.phoneTel} aria-label={business.callLabel} class="tabular font-display text-xl font-bold text-primary hover:underline">
+        {business.phoneDisplay}
+      </a>
+      <CallButton label={cta.header} size="sm" />
+    </div>
+  </div>
+</header>

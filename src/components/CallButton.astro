@@ -1,0 +1,61 @@
+---
+import Icon from './Icon.astro';
+import { business, cta } from '../data/site';
+
+interface Props {
+  label?: string;
+  sublabel?: string;
+  size?: 'sm' | 'md' | 'lg';
+  fullWidthMobile?: boolean;
+  reassurance?: string;
+  onDark?: boolean;
+  class?: string;
+  id?: string;
+}
+
+const {
+  label = cta.primary,
+  sublabel,
+  size = 'md',
+  fullWidthMobile = false,
+  reassurance,
+  onDark = false,
+  class: className = '',
+  id,
+} = Astro.props;
+
+const sizes = {
+  sm: 'min-h-12 px-5 text-base',
+  md: 'min-h-14 px-7 text-lg',
+  lg: 'min-h-16 px-8 text-lg sm:text-xl',
+};
+---
+
+<div class:list={['flex flex-col gap-2', fullWidthMobile ? 'w-full sm:w-fit' : 'w-fit', className]}>
+  <a
+    id={id}
+    href={business.phoneTel}
+    aria-label={business.callLabel}
+    class:list={[
+      'inline-flex cursor-pointer items-center justify-center gap-3 rounded-full bg-cta font-display font-bold text-on-cta shadow-[0_6px_20px_rgb(194_65_12/0.3)] transition-[background-color,transform] duration-150 ease-out hover:bg-cta-hover active:scale-[0.97] motion-reduce:active:scale-100',
+      sizes[size],
+      fullWidthMobile && 'w-full sm:w-auto',
+    ]}
+  >
+    <Icon name="phone" size={size === 'sm' ? 20 : 22} strokeWidth={2.5} />
+    {sublabel ? (
+      <span class="flex flex-col items-start py-2 leading-tight">
+        <span>{label}</span>
+        <span class="tabular text-base font-semibold whitespace-nowrap opacity-95">{sublabel}</span>
+      </span>
+    ) : (
+      <span class="tabular">{label}</span>
+    )}
+  </a>
+  {reassurance && (
+    <p class:list={['flex items-center gap-2 text-sm sm:text-[0.95rem]', onDark ? 'text-blue-100' : 'text-muted', fullWidthMobile && 'justify-center sm:justify-start']}>
+      <Icon name="shield-check" size={16} class={onDark ? 'text-blue-200 shrink-0' : 'text-success shrink-0'} />
+      <span>{reassurance}</span>
+    </p>
+  )}
+</div>

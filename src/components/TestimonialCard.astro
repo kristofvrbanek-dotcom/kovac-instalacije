@@ -1,0 +1,22 @@
+---
+import Icon from './Icon.astro';
+import { testimonialsSection } from '../data/site';
+
+interface Props {
+  t: { quote: string; name: string; town: string; job: string; rating: number };
+  class?: string;
+}
+
+const { t, class: className = '' } = Astro.props;
+---
+
+<li class:list={['lift flex flex-col rounded-2xl border border-border bg-white p-6 shadow-card', className]} data-reveal>
+  <p class="flex text-star" role="img" aria-label={testimonialsSection.starsLabel(t.rating)}>
+    {Array.from({ length: t.rating }).map(() => <Icon name="star" size={18} fill="currentColor" />)}
+  </p>
+  <blockquote class="mt-4 flex-1 text-[1.05rem]">“{t.quote}”</blockquote>
+  <p class="mt-5 flex flex-wrap items-center justify-between gap-2 border-t border-border pt-4">
+    <span class="font-semibold">{t.name}, {t.town}</span>
+    <span class="rounded-full bg-primary-soft px-2.5 py-0.5 text-xs font-semibold text-primary">{t.job}</span>
+  </p>
+</li>

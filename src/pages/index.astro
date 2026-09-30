@@ -1,0 +1,36 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Header from '../components/Header.astro';
+import Hero from '../components/Hero.astro';
+import ProofStrip from '../components/ProofStrip.astro';
+import Services from '../components/Services.astro';
+import HowItWorks from '../components/HowItWorks.astro';
+import Guarantees from '../components/Guarantees.astro';
+import MeetOwner from '../components/MeetOwner.astro';
+import BeforeAfter from '../components/BeforeAfter.astro';
+import Testimonials from '../components/Testimonials.astro';
+import Faq from '../components/Faq.astro';
+import Areas from '../components/Areas.astro';
+import FinalCta from '../components/FinalCta.astro';
+import Footer from '../components/Footer.astro';
+import StickyCallBar from '../components/StickyCallBar.astro';
+---
+
+<BaseLayout>
+  <Header />
+  <main id="main" tabindex="-1">
+    <Hero />
+    <ProofStrip />
+    <Services />
+    <HowItWorks />
+    <BeforeAfter />
+    <Guarantees />
+    <MeetOwner />
+    <Testimonials />
+    <Faq />
+    <Areas />
+    <FinalCta />
+  </main>
+  <Footer />
+  <StickyCallBar />
+</BaseLayout>

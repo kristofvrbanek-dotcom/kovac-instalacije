@@ -1,0 +1,63 @@
+---
+import CallButton from './CallButton.astro';
+import { Image } from 'astro:assets';
+import heroPhoto from '../assets/hero-marko.jpg';
+import Icon from './Icon.astro';
+import Stars from './Stars.astro';
+import { business, hero, objections } from '../data/site';
+---
+
+<section class="relative overflow-hidden bg-gradient-to-b from-primary-soft to-white" aria-labelledby="hero-heading">
+  <div class="mx-auto grid max-w-6xl items-center gap-10 px-4 pt-6 pb-14 sm:px-6 md:grid-cols-[1.1fr_1fr] md:gap-12 md:pt-16 md:pb-24">
+    <div>
+      <p data-hero style="--hero-step: 0" class="inline-flex items-center gap-2 rounded-full border border-border bg-white px-3 py-1.5 text-sm font-semibold text-primary">
+        <Icon name="clock" size={16} />
+        {hero.pill}
+      </p>
+
+      <h1 id="hero-heading" data-hero style="--hero-step: 1" class="mt-4 text-[2.25rem] leading-[1.1] font-extrabold sm:text-5xl md:text-[3.5rem]">
+        {hero.headline}
+      </h1>
+      <p data-hero style="--hero-step: 2" class="mt-4 max-w-xl text-lg text-muted sm:text-xl">{hero.subline}</p>
+
+      <div data-hero style="--hero-step: 3" class="mt-6">
+        <CallButton
+          id="hero-cta"
+          label={hero.cta}
+          sublabel={business.phoneDisplay}
+          size="lg"
+          fullWidthMobile
+          reassurance={objections.hero}
+        />
+      </div>
+
+      <ul data-hero style="--hero-step: 4" class="mt-7 flex flex-wrap items-center gap-x-6 gap-y-3 text-sm font-medium text-ink" aria-label={hero.trustLabel}>
+        <li class="flex items-center gap-2">
+          <span class="grid h-8 w-8 place-items-center rounded-lg bg-primary text-[0.6rem] leading-none font-extrabold text-white" aria-hidden="true">{business.licenseBadge[0]}<br />{business.licenseBadge[1]}</span>
+          {business.licenseShort}
+        </li>
+        <li class="flex items-center gap-1.5">
+          <Stars value={business.ratingValue} size={16} />
+          <span><strong>{business.rating}</strong> ({business.reviewCount} {hero.reviewsLabel})</span>
+        </li>
+        <li class="flex items-center gap-2">
+          <Icon name="map-pin" size={18} class="text-primary" />
+          {business.years} {hero.yearsLabel}
+        </li>
+      </ul>
+    </div>
+
+    <div class="overflow-hidden rounded-xl shadow-card">
+      <Image
+        src={heroPhoto}
+        alt={hero.imageAlt}
+        widths={[450, 700, 900]}
+        sizes="(min-width: 768px) 45vw, 100vw"
+        loading="eager"
+        fetchpriority="high"
+        data-hero-img
+        class="aspect-[5/4] w-full object-cover"
+      />
+    </div>
+  </div>
+</section>

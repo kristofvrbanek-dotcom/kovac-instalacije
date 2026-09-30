@@ -1,0 +1,27 @@
+---
+import { proofStats, a11y } from '../data/site';
+
+// »18 let« → štejemo 18 in dodamo » let«; besedilo brez številke (npr. »Brezplačen«) ostane, kot je.
+const parse = (v: string) => {
+  const m = v.match(/^(\d+(?:,\d+)?)(.*)$/);
+  return m ? { count: m[1], suffix: m[2] } : null;
+};
+---
+
+<section aria-label={a11y.keyFacts} class="border-y border-border bg-white">
+  <dl class="mx-auto grid max-w-6xl grid-cols-2 gap-px bg-border md:grid-cols-4">
+    {proofStats.map((stat) => (
+      <div class="bg-white px-4 py-6 text-center sm:py-8" data-reveal>
+        <dt class="sr-only">{stat.label}</dt>
+        <dd>
+          <span
+            class="tabular block font-display text-2xl font-extrabold text-primary sm:text-3xl"
+            data-count={parse(stat.value)?.count}
+            data-suffix={parse(stat.value)?.suffix}
+          >{stat.value}</span>
+          <span class="mt-1 block text-sm text-muted" aria-hidden="true">{stat.label}</span>
+        </dd>
+      </div>
+    ))}
+  </dl>
+</section>

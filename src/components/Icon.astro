@@ -1,0 +1,43 @@
+---
+// Maps icon names used in site.ts to Lucide components. Decorative by default.
+import {
+  ArrowUp, BadgeEuro, Bath, Check, ChevronDown, CircleCheck, ClipboardCheck,
+  Clock, Droplets, Fan, Flame, Heater, MapPin, Phone, ShieldCheck, Star, Toilet,
+  TriangleAlert, Truck,
+} from '@lucide/astro';
+
+const icons = {
+  'arrow-up': ArrowUp,
+  'badge-euro': BadgeEuro,
+  bath: Bath,
+  check: Check,
+  'chevron-down': ChevronDown,
+  'circle-check': CircleCheck,
+  'clipboard-check': ClipboardCheck,
+  clock: Clock,
+  droplets: Droplets,
+  fan: Fan,
+  flame: Flame,
+  heater: Heater,
+  'map-pin': MapPin,
+  phone: Phone,
+  'shield-check': ShieldCheck,
+  star: Star,
+  toilet: Toilet,
+  'triangle-alert': TriangleAlert,
+  truck: Truck,
+};
+
+interface Props {
+  name: keyof typeof icons | string;
+  size?: number;
+  class?: string;
+  strokeWidth?: number;
+  fill?: string;
+}
+
+const { name, size = 24, class: className, strokeWidth = 2, fill = 'none' } = Astro.props;
+const Component = icons[name as keyof typeof icons] ?? Check;
+---
+
+<Component size={size} class={className} stroke-width={strokeWidth} fill={fill} aria-hidden="true" focusable="false" />

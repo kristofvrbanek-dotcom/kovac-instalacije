@@ -1,0 +1,41 @@
+---
+import Icon from './Icon.astro';
+import { business, objections, cta } from '../data/site';
+---
+
+<!-- Samo na telefonu. Skrito, dokler glavni gumb ne izgine z zaslona. -->
+<div
+  id="sticky-call"
+  data-visible="false"
+  aria-hidden="true"
+  class="fixed inset-x-0 bottom-0 z-50 translate-y-full border-t border-border bg-white/97 px-4 pt-2 pb-[calc(0.75rem+env(safe-area-inset-bottom))] shadow-bar backdrop-blur transition-transform duration-300 ease-out data-[visible=true]:translate-y-0 motion-reduce:transition-none md:hidden"
+>
+  <p class="mb-1.5 text-center text-xs font-medium text-muted">{objections.sticky}</p>
+  <a
+    href={business.phoneTel}
+    aria-label={business.callLabel}
+    tabindex="-1"
+    class="flex min-h-14 w-full cursor-pointer items-center justify-center gap-3 rounded-full bg-cta font-display text-lg font-bold text-on-cta transition-colors hover:bg-cta-hover active:scale-[0.97]"
+  >
+    <Icon name="phone" size={22} strokeWidth={2.5} />
+    {cta.sticky}
+  </a>
+</div>
+
+<script is:inline>
+  (function () {
+    var bar = document.getElementById('sticky-call');
+    var hero = document.getElementById('hero-cta');
+    if (!bar || !hero || !('IntersectionObserver' in window)) {
+      if (bar) { bar.dataset.visible = 'true'; bar.querySelector('a').removeAttribute('tabindex'); }
+      return;
+    }
+    var link = bar.querySelector('a');
+    new IntersectionObserver(function (entries) {
+      var show = !entries[0].isIntersecting && entries[0].boundingClientRect.top < 0;
+      bar.dataset.visible = String(show);
+      if (show) { link.removeAttribute('tabindex'); bar.removeAttribute('aria-hidden'); }
+      else { link.setAttribute('tabindex', '-1'); bar.setAttribute('aria-hidden', 'true'); }
+    }).observe(hero);
+  })();
+</script>

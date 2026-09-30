@@ -1,0 +1,35 @@
+---
+// Stand-in for a real photo. Fixed aspect ratio so swapping in <Image> later causes no layout shift.
+interface Props {
+  label: string;
+  alt: string;
+  tone?: 'navy' | 'before' | 'after';
+  ratio?: string;
+  class?: string;
+}
+
+const { label, alt, tone = 'navy', ratio = '4 / 3', class: className = '' } = Astro.props;
+
+const tones = {
+  navy: 'bg-gradient-to-br from-primary to-navy-900 text-blue-100',
+  before: 'bg-before text-before-ink',
+  after: 'bg-primary-soft text-primary',
+};
+---
+
+<div
+  role="img"
+  aria-label={alt}
+  style={`aspect-ratio: ${ratio}`}
+  class:list={['relative flex w-full items-end overflow-hidden rounded-xl', tones[tone], className]}
+>
+  <div
+    class="absolute inset-0 opacity-[0.08]"
+    style="background-image: linear-gradient(currentColor 1px, transparent 1px), linear-gradient(90deg, currentColor 1px, transparent 1px); background-size: 24px 24px;"
+    aria-hidden="true"
+  ></div>
+  <span class="relative m-3 rounded-md bg-black/10 px-2.5 py-1 text-xs font-medium backdrop-blur-[1px]" aria-hidden="true">
+    {label}
+  </span>
+  <slot />
+</div>

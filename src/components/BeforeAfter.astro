@@ -1,0 +1,65 @@
+---
+import CallButton from './CallButton.astro';
+import Icon from './Icon.astro';
+import { Image } from 'astro:assets';
+import Placeholder from './Placeholder.astro';
+import SectionHeading from './SectionHeading.astro';
+import { caseStudies, resultsSection as r, objections, cta } from '../data/site';
+---
+
+<section class="py-16 md:py-24" aria-labelledby="results-heading">
+  <div class="mx-auto max-w-6xl px-4 sm:px-6">
+    <SectionHeading id="results-heading" eyebrow={r.eyebrow} title={r.title} />
+
+    <ul class="mt-10 grid gap-6 lg:grid-cols-2">
+      {caseStudies.map((c) => (
+        <li class="lift overflow-hidden rounded-2xl border border-border bg-white shadow-card" data-reveal>
+          <div class="grid gap-2 p-2 sm:grid-cols-2">
+            <div class="relative">
+              {'image' in c.before && c.before.image ? (
+                <div class="overflow-hidden rounded-xl" data-reveal="img" data-delay="0">
+                  <Image src={c.before.image} alt={c.before.alt} widths={[400, 600, 900]} sizes="(min-width: 1024px) 280px, (min-width: 640px) 45vw, 100vw" class="aspect-[4/3] w-full object-cover" />
+                </div>
+              ) : (
+                <Placeholder label={c.before.label} alt={c.before.alt} tone="before" />
+              )}
+              <span data-reveal="badge" data-delay="500" class="absolute top-3 left-3 rounded-md bg-ink px-2.5 py-1 text-xs font-bold tracking-wide text-white uppercase">{r.beforeLabel}</span>
+            </div>
+            <div class="relative">
+              {'image' in c.after && c.after.image ? (
+                <div class="overflow-hidden rounded-xl" data-reveal="img" data-delay="250">
+                  <Image src={c.after.image} alt={c.after.alt} widths={[400, 600, 900]} sizes="(min-width: 1024px) 280px, (min-width: 640px) 45vw, 100vw" class="aspect-[4/3] w-full object-cover" />
+                </div>
+              ) : (
+                <Placeholder label={c.after.label} alt={c.after.alt} tone="after" />
+              )}
+              <span data-reveal="badge" data-delay="750" class="absolute top-3 left-3 rounded-md bg-success px-2.5 py-1 text-xs font-bold tracking-wide text-white uppercase">{r.afterLabel}</span>
+            </div>
+          </div>
+          <div class="p-6 pt-4">
+            <div class="flex flex-wrap items-center justify-between gap-2">
+              <h3 class="text-xl font-extrabold">{c.title}, {c.town}</h3>
+              <span class="inline-flex items-center gap-1.5 rounded-full bg-primary-soft px-3 py-1 text-sm font-semibold text-primary">
+                <Icon name="clock" size={15} />
+                {c.duration}
+              </span>
+            </div>
+            <dl class="mt-4 space-y-3 text-[0.95rem]">
+              <div><dt class="font-semibold">{r.problemLabel}</dt><dd class="text-muted">{c.problem}</dd></div>
+              <div><dt class="font-semibold">{r.fixLabel}</dt><dd class="text-muted">{c.fix}</dd></div>
+            </dl>
+            <p class="mt-4 flex gap-2 rounded-lg bg-green-50 p-3 font-semibold text-green-900">
+              <Icon name="circle-check" size={20} class="mt-0.5 shrink-0 text-success" />
+              <span><span class="sr-only">{r.resultLabel} </span>{c.result}</span>
+            </p>
+          </div>
+        </li>
+      ))}
+    </ul>
+
+    <div data-reveal class="mt-10 flex flex-col items-center gap-4 text-center">
+      <p class="font-display text-xl font-bold text-primary sm:text-2xl">{r.ctaText}</p>
+      <CallButton label={cta.short} fullWidthMobile reassurance={objections.results} />
+    </div>
+  </div>
+</section>

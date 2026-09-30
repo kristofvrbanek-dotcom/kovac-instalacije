@@ -1,0 +1,41 @@
+---
+import Icon from './Icon.astro';
+import SectionHeading from './SectionHeading.astro';
+import TestimonialCard from './TestimonialCard.astro';
+import Stars from './Stars.astro';
+import { business, testimonials, testimonialsSection as s } from '../data/site';
+
+const first = testimonials.slice(0, 3);
+const rest = testimonials.slice(3);
+---
+
+<section class="py-16 md:py-24" aria-labelledby="reviews-heading">
+  <div class="mx-auto max-w-6xl px-4 sm:px-6">
+    <div class="flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
+      <SectionHeading id="reviews-heading" eyebrow={s.eyebrow} title={s.title} />
+      <p class="flex items-center gap-2 font-semibold">
+        <Stars value={business.ratingValue} size={20} />
+        {s.ratingLine}
+      </p>
+    </div>
+
+    <ul class="mt-10 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+      {first.map((t) => <TestimonialCard t={t} />)}
+      {/* Od tablice navzgor so vsa mnenja prikazana. Na telefonu so ostala v <details> spodaj. */}
+      {rest.map((t) => <TestimonialCard t={t} class="hidden sm:flex" />)}
+    </ul>
+
+    <details class="group mt-5 sm:hidden">
+      <summary class="flex min-h-12 cursor-pointer list-none items-center justify-center gap-2 rounded-full border-2 border-primary bg-white px-5 font-semibold text-primary">
+        <span class="group-open:hidden">{s.more(rest.length)}</span>
+        <span class="hidden group-open:inline">{s.fewer}</span>
+        <Icon name="chevron-down" size={20} class="chevron" />
+      </summary>
+      <ul class="mt-5 grid gap-5">
+        {rest.map((t) => <TestimonialCard t={t} />)}
+      </ul>
+    </details>
+
+    <p class="mt-6 text-sm text-muted">{s.note}</p>
+  </div>
+</section>

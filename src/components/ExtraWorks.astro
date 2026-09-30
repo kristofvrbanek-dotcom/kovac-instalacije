@@ -1,0 +1,16 @@
+---
+import Icon from './Icon.astro';
+import { extraWorks } from '../data/site';
+---
+
+<div class="mt-12">
+  <h3 data-reveal class="text-xl font-bold">{extraWorks.title}</h3>
+  <ul class="mt-4 grid gap-x-8 gap-y-2.5 sm:grid-cols-2 lg:grid-cols-3">
+    {extraWorks.items.map((item) => (
+      <li data-reveal class="flex items-start gap-2.5">
+        <Icon name="check" size={20} class="mt-0.5 shrink-0 text-success" strokeWidth={2.5} />
+        <span>{item}</span>
+      </li>
+    ))}
+  </ul>
+</div>

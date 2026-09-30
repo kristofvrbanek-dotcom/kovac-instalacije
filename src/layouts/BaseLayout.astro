@@ -1,0 +1,116 @@
+---
+import '../styles/global.css';
+import { business, seo, faqs, areas, a11y } from '../data/site';
+
+const base = import.meta.env.BASE_URL.replace(/\/?$/, '/');
+const canonical = new URL(Astro.url.pathname, Astro.site);
+
+const businessSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'Plumber',
+  name: business.name,
+  telephone: business.phoneE164,
+  areaServed: areas.map((a) => ({ '@type': 'City', name: a })),
+  address: { '@type': 'PostalAddress', addressLocality: business.base, addressCountry: 'SI' },
+  openingHoursSpecification: [
+    {
+      '@type': 'OpeningHoursSpecification',
+      dayOfWeek: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'],
+      opens: '07:00',
+      closes: '19:00',
+    },
+    { '@type': 'OpeningHoursSpecification', dayOfWeek: 'Saturday', opens: '08:00', closes: '14:00' },
+  ],
+  aggregateRating: { '@type': 'AggregateRating', ratingValue: business.ratingValue, reviewCount: business.reviewCount },
+};
+
+const faqSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: faqs.map((f) => ({
+    '@type': 'Question',
+    name: f.question,
+    acceptedAnswer: { '@type': 'Answer', text: f.answer },
+  })),
+};
+---
+
+<!doctype html>
+<html lang={seo.lang} id="top">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <title>{seo.title}</title>
+    <meta name="description" content={seo.description} />
+    <meta name="robots" content="noindex, nofollow" />
+    <meta name="theme-color" content="#1E3A8A" />
+    <link rel="canonical" href={canonical} />
+    <link rel="icon" type="image/svg+xml" href={`${base}favicon.svg`} />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content={seo.title} />
+    <meta property="og:description" content={seo.description} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:locale" content={seo.locale} />
+    <script type="application/ld+json" set:html={JSON.stringify(businessSchema)} />
+    <script type="application/ld+json" set:html={JSON.stringify(faqSchema)} />
+    <script is:inline>
+      // Animacije vklopimo le, če je gibanje dovoljeno; sicer ostane vse takoj vidno.
+      if (window.matchMedia('(prefers-reduced-motion: no-preference)').matches && 'IntersectionObserver' in window) {
+        document.documentElement.classList.add('js-anim');
+      }
+    </script>
+  </head>
+  <body>
+    <a
+      href="#main"
+      class="sr-only focus:not-sr-only focus:fixed focus:top-3 focus:left-3 focus:z-[100] focus:rounded-lg focus:bg-primary focus:px-4 focus:py-3 focus:font-semibold focus:text-white"
+    >
+      {a11y.skipLink}
+    </a>
+    <slot />
+    <script is:inline>
+      (function () {
+        if (!document.documentElement.classList.contains('js-anim')) return;
+
+        var STEP = 90; // zamik med elementi, ki se pokažejo hkrati (ms)
+        var MAX_STEPS = 5;
+
+        // Štetje številk: besedilo v HTML je že končna vrednost, skripta ga le prešteje od 0.
+        function countUp(el) {
+          var target = parseFloat(el.getAttribute('data-count').replace(',', '.'));
+          var decimals = (el.getAttribute('data-count').split(',')[1] || '').length;
+          var suffix = el.getAttribute('data-suffix') || '';
+          var start = null;
+          var duration = 1200;
+          function frame(t) {
+            if (start === null) start = t;
+            var p = Math.min((t - start) / duration, 1);
+            var eased = 1 - Math.pow(1 - p, 3);
+            el.textContent = (target * eased).toFixed(decimals).replace('.', ',') + suffix;
+            if (p < 1) requestAnimationFrame(frame);
+          }
+          requestAnimationFrame(frame);
+        }
+
+        var io = new IntersectionObserver(
+          function (entries) {
+            var shown = entries
+              .filter(function (e) { return e.isIntersecting; })
+              .map(function (e) { return e.target; });
+            // Elementi, ki pridejo na zaslon hkrati, se pokažejo zaporedoma (v vrstnem redu na strani).
+            shown.forEach(function (el, i) {
+              var extra = parseInt(el.getAttribute('data-delay') || '0', 10);
+              el.style.setProperty('--reveal-delay', Math.min(i, MAX_STEPS) * STEP + extra + 'ms');
+              el.classList.add('is-visible');
+              io.unobserve(el);
+              el.querySelectorAll('[data-count]').forEach(countUp);
+            });
+          },
+          { rootMargin: '0px 0px -10% 0px', threshold: 0.1 }
+        );
+
+        document.querySelectorAll('[data-reveal]').forEach(function (el) { io.observe(el); });
+      })();
+    </script>
+  </body>
+</html>

@@ -1,0 +1,20 @@
+---
+import Icon from './Icon.astro';
+import SectionHeading from './SectionHeading.astro';
+import { areas, areasSection as s } from '../data/site';
+---
+
+<section class="py-16 md:py-20" aria-labelledby="areas-heading">
+  <div class="mx-auto max-w-6xl px-4 sm:px-6">
+    <SectionHeading id="areas-heading" eyebrow={s.eyebrow} title={s.title} intro={s.intro} />
+    <ul class="mt-8 flex flex-wrap gap-2.5">
+      {areas.map((a) => (
+        <li data-reveal class="inline-flex items-center gap-1.5 rounded-full border border-border bg-primary-soft px-4 py-2 font-medium">
+          <Icon name="map-pin" size={16} class="text-primary" />
+          {a}
+        </li>
+      ))}
+    </ul>
+    <p data-reveal class="mt-6 text-lg">{s.outside}</p>
+  </div>
+</section>
